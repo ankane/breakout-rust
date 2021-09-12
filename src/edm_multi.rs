@@ -141,7 +141,7 @@ pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usiz
             insert_element(&mut right_min, &mut right_max, z[i]);
         }
 
-        // iterate over possible locations for the penultiamte change
+        // iterate over possible locations for the penultimate change
         for t in min_size..s - min_size + 1 { // modify limits to deal with min_size
             insert_element(&mut left_min, &mut left_max, z[t - 1]); // insert element into left tree
             remove_element(&mut right_min, &mut right_max, z[t - 1]); // remove element from right tree

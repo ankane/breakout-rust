@@ -1,4 +1,4 @@
-use crate::multiset::MultiSet;
+use crate::multiset::Multiset;
 use std::cmp::Ordering;
 
 #[derive(PartialEq)]
@@ -37,7 +37,7 @@ impl Ord for MinItem {
     }
 }
 
-fn insert_element(m: &mut MultiSet<MinItem>, m2: &mut MultiSet<MaxItem>, x: f64) {
+fn insert_element(m: &mut Multiset<MinItem>, m2: &mut Multiset<MaxItem>, x: f64) {
     if m.is_empty() || x < m.first().unwrap().0 {
         m2.insert(MaxItem(x));
     } else {
@@ -57,7 +57,7 @@ fn insert_element(m: &mut MultiSet<MinItem>, m2: &mut MultiSet<MaxItem>, x: f64)
     }
 }
 
-fn remove_element(m: &mut MultiSet<MinItem>, m2: &mut MultiSet<MaxItem>, x: f64) {
+fn remove_element(m: &mut Multiset<MinItem>, m2: &mut Multiset<MaxItem>, x: f64) {
     if x < m.first().unwrap().0 {
         m2.remove(MaxItem(x));
     } else {
@@ -78,7 +78,7 @@ fn remove_element(m: &mut MultiSet<MinItem>, m2: &mut MultiSet<MaxItem>, x: f64)
 }
 
 // given a pair of trees obtain the median
-fn get_median(m: &MultiSet<MinItem>, m2: &MultiSet<MaxItem>) -> f64 {
+fn get_median(m: &Multiset<MinItem>, m2: &Multiset<MaxItem>) -> f64 {
     if m.len() > m2.len() {
         m.first().unwrap().0
     } else if m2.len() > m.len() {
@@ -119,12 +119,12 @@ pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usiz
     let mut f = vec![-3.0; n + 1];
 
     // trees used to store the "upper half" of the considered observations
-    let mut right_min = MultiSet::new();
-    let mut left_min = MultiSet::new();
+    let mut right_min = Multiset::new();
+    let mut left_min = Multiset::new();
 
     // trees used to store the "lower half" of the considered observations
-    let mut right_max = MultiSet::new();
-    let mut left_max = MultiSet::new();
+    let mut right_max = Multiset::new();
+    let mut left_max = Multiset::new();
 
     // iterate over possible locations for the last change
     for s in 2 * min_size..n + 1 {
@@ -208,12 +208,12 @@ pub fn edm_percent(z: &[f64], min_size: usize, percent: f64, degree: i32) -> Vec
     let mut f = vec![0.0; n + 1];
 
     // trees used to store the "upper half" of the considered observations
-    let mut right_min = MultiSet::new();
-    let mut left_min = MultiSet::new();
+    let mut right_min = Multiset::new();
+    let mut left_min = Multiset::new();
 
     // trees used to store the "lower half" of the considered observations
-    let mut right_max = MultiSet::new();
-    let mut left_max = MultiSet::new();
+    let mut right_max = Multiset::new();
+    let mut left_max = Multiset::new();
 
     // iterate over possible locations for the last change
     for s in 2 * min_size..n + 1 {

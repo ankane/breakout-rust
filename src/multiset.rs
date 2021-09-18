@@ -1,12 +1,12 @@
 use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
 
-pub struct MultiSet<T> {
+pub struct Multiset<T> {
     map: BTreeMap<T, usize>,
     len: usize
 }
 
-impl<T: std::cmp::Ord> MultiSet<T> {
+impl<T: std::cmp::Ord> Multiset<T> {
     pub fn new() -> Self {
         Self {
             map: BTreeMap::new(),
@@ -31,18 +31,52 @@ impl<T: std::cmp::Ord> MultiSet<T> {
         self.len += 1;
     }
 
-    pub fn remove(&mut self, value: T) {
+    pub fn remove(&mut self, value: T) -> bool {
         if let Entry::Occupied(mut o) = self.map.entry(value) {
             *o.get_mut() -= 1;
             if *o.get() == 0 {
                 o.remove_entry();
             }
             self.len -= 1;
+            true
+        } else {
+            false
         }
     }
 
     pub fn clear(&mut self) {
         self.map.clear();
         self.len = 0;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_works() {
+        let mut mset = crate::multiset::Multiset::new();
+        assert_eq!(mset.len(), 0);
+        assert!(mset.is_empty());
+        assert_eq!(mset.first(), None);
+
+        mset.insert(2);
+        mset.insert(1);
+        mset.insert(1);
+        mset.insert(3);
+
+        assert_eq!(mset.len(), 4);
+        assert!(!mset.is_empty());
+        assert_eq!(mset.first(), Some(&1));
+
+        assert!(mset.remove(2));
+        assert!(!mset.remove(2));
+
+        assert_eq!(mset.len(), 3);
+
+        mset.clear();
+
+        assert_eq!(mset.len(), 0);
+        assert!(mset.is_empty());
+        assert_eq!(mset.first(), None);
     }
 }

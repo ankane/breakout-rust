@@ -52,9 +52,11 @@ impl<T: std::cmp::Ord> Multiset<T> {
 
 #[cfg(test)]
 mod tests {
+    use crate::multiset::Multiset;
+
     #[test]
     fn test_works() {
-        let mut mset = crate::multiset::Multiset::new();
+        let mut mset = Multiset::new();
         assert_eq!(mset.len(), 0);
         assert!(mset.is_empty());
         assert_eq!(mset.first(), None);

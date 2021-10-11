@@ -122,4 +122,25 @@ mod tests {
         let breakouts = crate::multi().min_size(5).fit(&series);
         assert_eq!(vec![10], breakouts);
     }
+
+    #[test]
+    #[should_panic(expected = "min_size must be at least 2")]
+    fn test_bad_min_size() {
+        let series = Vec::new();
+        crate::multi().min_size(1).fit(&series);
+    }
+
+    #[test]
+    #[should_panic(expected = "beta and percent cannot be passed together")]
+    fn test_beta_percent() {
+        let series = Vec::new();
+        crate::multi().beta(0.008).percent(0.5).fit(&series);
+    }
+
+    #[test]
+    #[should_panic(expected = "degree must be 0, 1, or 2")]
+    fn test_bad_degree() {
+        let series = Vec::new();
+        crate::multi().degree(3).fit(&series);
+    }
 }

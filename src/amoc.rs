@@ -18,6 +18,11 @@ impl AmocParams {
         self
     }
 
+    pub fn alpha(&mut self, value: f64) -> &mut Self {
+        self.alpha = value;
+        self
+    }
+
     pub fn exact(&mut self, value: bool) -> &mut Self {
         self.exact = value;
         self
@@ -108,5 +113,12 @@ mod tests {
         ];
         let breakout = crate::amoc().min_size(5).fit(&series);
         assert_eq!(breakout, Some(10));
+    }
+
+    #[test]
+    #[should_panic(expected = "alpha must be between 0 and 2")]
+    fn test_bad_alpha() {
+        let series = Vec::new();
+        crate::amoc().alpha(3.0).fit(&series);
     }
 }

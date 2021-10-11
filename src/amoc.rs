@@ -116,6 +116,13 @@ mod tests {
     }
 
     #[test]
+    #[should_panic(expected = "min_size must be at least 2")]
+    fn test_bad_min_size() {
+        let series = Vec::new();
+        crate::amoc().min_size(1).fit(&series);
+    }
+
+    #[test]
     #[should_panic(expected = "alpha must be between 0 and 2")]
     fn test_bad_alpha() {
         let series = Vec::new();

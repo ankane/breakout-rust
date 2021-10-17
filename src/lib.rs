@@ -6,8 +6,10 @@ mod amoc;
 mod edm_multi;
 mod edm_tail;
 mod edmx;
+mod error;
 mod multi;
 mod multiset;
 
 pub use amoc::{amoc, AmocParams};
 pub use multi::{multi, MultiParams};
+pub use error::Error;

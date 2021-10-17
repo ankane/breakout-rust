@@ -1,3 +1,5 @@
+use crate::Error;
+
 pub struct AmocParams {
     min_size: usize,
     alpha: f64,
@@ -29,11 +31,19 @@ impl AmocParams {
     }
 
     pub fn fit(&self, z: &[f64]) -> Option<usize> {
-        assert!(self.min_size >= 2, "min_size must be at least 2");
-        assert!(self.alpha >= 0.0 && self.alpha <= 2.0, "alpha must be between 0 and 2");
+        self.fit_result(z).unwrap_or_else(|e| panic!("{}", e))
+    }
+
+    fn fit_result(&self, z: &[f64]) -> Result<Option<usize>, Error> {
+        if self.min_size < 2 {
+            return Err(Error::Parameter("min_size must be at least 2".to_string()));
+        }
+        if self.alpha < 0.0 || self.alpha > 2.0 {
+            return Err(Error::Parameter("alpha must be between 0 and 2".to_string()));
+        }
 
         if z.len() < self.min_size {
-            return None;
+            return Ok(None);
         }
 
         // scale observations
@@ -41,7 +51,7 @@ impl AmocParams {
         let max = z.iter().max_by(|i, j| i.partial_cmp(j).unwrap()).unwrap();
         let denom = max - min;
         if denom == 0.0 {
-            return None;
+            return Ok(None);
         }
         let zcounts: Vec<f64> = z.iter().map(|x| (x - min) / denom).collect();
 
@@ -52,9 +62,9 @@ impl AmocParams {
         };
 
         if stat > 0.0 {
-            Some(loc)
+            Ok(Some(loc))
         } else {
-            None
+            Ok(None)
         }
     }
 }

@@ -1,3 +1,5 @@
+use crate::Error;
+
 pub struct MultiParams {
     min_size: usize,
     degree: i32,
@@ -42,12 +44,22 @@ impl MultiParams {
     }
 
     pub fn fit(&self, z: &[f64]) -> Vec<usize> {
-        assert!(self.min_size >= 2, "min_size must be at least 2");
-        assert!(self.beta.is_none() || self.percent.is_none(), "beta and percent cannot be passed together");
-        assert!(self.degree >= 0 && self.degree <= 2, "degree must be 0, 1, or 2");
+        self.fit_result(z).unwrap_or_else(|e| panic!("{}", e))
+    }
+
+    fn fit_result(&self, z: &[f64]) -> Result<Vec<usize>, Error> {
+        if self.min_size < 2 {
+            return Err(Error::Parameter("min_size must be at least 2".to_string()));
+        }
+        if self.beta.is_some() && self.percent.is_some() {
+            return Err(Error::Parameter("beta and percent cannot be passed together".to_string()));
+        }
+        if self.degree < 0 || self.degree > 2 {
+            return Err(Error::Parameter("degree must be 0, 1, or 2".to_string()));
+        }
 
         if z.len() < self.min_size {
-            return Vec::new();
+            return Ok(Vec::new());
         }
 
         // scale observations
@@ -55,14 +67,14 @@ impl MultiParams {
         let max = z.iter().max_by(|i, j| i.partial_cmp(j).unwrap()).unwrap();
         let denom = max - min;
         if denom == 0.0 {
-            return Vec::new();
+            return Ok(Vec::new());
         }
         let zcounts: Vec<f64> = z.iter().map(|x| (x - min) / denom).collect();
 
         if self.percent.is_some() {
-            crate::edm_multi::edm_percent(&zcounts, self.min_size, self.percent.unwrap(), self.degree)
+            Ok(crate::edm_multi::edm_percent(&zcounts, self.min_size, self.percent.unwrap(), self.degree))
         } else {
-            crate::edm_multi::edm_multi(&zcounts, self.min_size, self.beta.unwrap_or(0.008), self.degree)
+            Ok(crate::edm_multi::edm_multi(&zcounts, self.min_size, self.beta.unwrap_or(0.008), self.degree))
         }
     }
 }

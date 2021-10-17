@@ -9,5 +9,5 @@ mod edmx;
 mod multi;
 mod multiset;
 
-pub use amoc::amoc;
-pub use multi::multi;
+pub use amoc::{amoc, AmocParams};
+pub use multi::{multi, MultiParams};

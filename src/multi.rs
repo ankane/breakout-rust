@@ -43,11 +43,7 @@ impl MultiParams {
         self
     }
 
-    pub fn fit(&self, z: &[f64]) -> Vec<usize> {
-        self.fit_result(z).unwrap_or_else(|e| panic!("{}", e))
-    }
-
-    fn fit_result(&self, z: &[f64]) -> Result<Vec<usize>, Error> {
+    pub fn fit(&self, z: &[f64]) -> Result<Vec<usize>, Error> {
         if self.min_size < 2 {
             return Err(Error::Parameter("min_size must be at least 2".to_string()));
         }
@@ -81,6 +77,8 @@ impl MultiParams {
 
 #[cfg(test)]
 mod tests {
+    use crate::Error;
+
     fn generate_series() -> Vec<f64> {
         vec![
             3.0, 1.0, 2.0, 3.0, 2.0, 1.0, 1.0, 2.0, 2.0, 3.0,
@@ -92,28 +90,28 @@ mod tests {
     #[test]
     fn test_multi() {
         let series = generate_series();
-        let breakouts = crate::multi().min_size(5).fit(&series);
+        let breakouts = crate::multi().min_size(5).fit(&series).unwrap();
         assert_eq!(vec![10, 15, 20], breakouts);
     }
 
     #[test]
     fn test_percent() {
         let series = generate_series();
-        let breakouts = crate::multi().min_size(5).percent(0.5).fit(&series);
+        let breakouts = crate::multi().min_size(5).percent(0.5).fit(&series).unwrap();
         assert_eq!(vec![8, 19], breakouts);
     }
 
     #[test]
     fn test_empty() {
         let series = Vec::new();
-        let breakouts = crate::multi().fit(&series);
+        let breakouts = crate::multi().fit(&series).unwrap();
         assert!(breakouts.is_empty());
     }
 
     #[test]
     fn test_constant() {
         let series = vec![1.0; 100];
-        let breakouts = crate::multi().fit(&series);
+        let breakouts = crate::multi().fit(&series).unwrap();
         assert!(breakouts.is_empty());
     }
 
@@ -121,7 +119,7 @@ mod tests {
     fn test_almost_constant() {
         let mut series = vec![1.0; 100];
         series[50] = 2.0;
-        let breakouts = crate::multi().fit(&series);
+        let breakouts = crate::multi().fit(&series).unwrap();
         assert!(breakouts.is_empty());
     }
 
@@ -131,28 +129,37 @@ mod tests {
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
             1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
         ];
-        let breakouts = crate::multi().min_size(5).fit(&series);
+        let breakouts = crate::multi().min_size(5).fit(&series).unwrap();
         assert_eq!(vec![10], breakouts);
     }
 
     #[test]
-    #[should_panic(expected = "min_size must be at least 2")]
     fn test_bad_min_size() {
         let series = Vec::new();
-        crate::multi().min_size(1).fit(&series);
+        let result = crate::multi().min_size(1).fit(&series);
+        assert_eq!(
+            result.unwrap_err(),
+            Error::Parameter("min_size must be at least 2".to_string())
+        );
     }
 
     #[test]
-    #[should_panic(expected = "beta and percent cannot be passed together")]
     fn test_beta_percent() {
         let series = Vec::new();
-        crate::multi().beta(0.008).percent(0.5).fit(&series);
+        let result = crate::multi().beta(0.008).percent(0.5).fit(&series);
+        assert_eq!(
+            result.unwrap_err(),
+            Error::Parameter("beta and percent cannot be passed together".to_string())
+        );
     }
 
     #[test]
-    #[should_panic(expected = "degree must be 0, 1, or 2")]
     fn test_bad_degree() {
         let series = Vec::new();
-        crate::multi().degree(3).fit(&series);
+        let result = crate::multi().degree(3).fit(&series);
+        assert_eq!(
+            result.unwrap_err(),
+            Error::Parameter("degree must be 0, 1, or 2".to_string())
+        );
     }
 }

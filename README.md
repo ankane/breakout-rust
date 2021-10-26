@@ -24,13 +24,13 @@ let series = vec![
     6.0, 4.0, 4.0, 5.0, 6.0, 4.0, 4.0, 4.0, 6.0, 5.0,
     9.0, 8.0, 7.0, 9.0, 8.0, 9.0, 9.0, 9.0, 7.0, 9.0
 ];
-let breakouts = breakout::multi().min_size(5).fit(&series);
+let breakouts = breakout::multi().min_size(5).fit(&series).unwrap();
 ```
 
 Detect a single breakout (at most one change)
 
 ```rust
-let breakout = breakout::amoc().min_size(5).fit(&series);
+let breakout = breakout::amoc().min_size(5).fit(&series).unwrap();
 ```
 
 ## Options

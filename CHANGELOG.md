@@ -1,3 +1,7 @@
+## 0.2.0 (unreleased)
+
+- Changed `fit` to return `Result`
+
 ## 0.1.1 (2021-10-10)
 
 - Added `alpha` method

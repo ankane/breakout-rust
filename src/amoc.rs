@@ -30,11 +30,7 @@ impl AmocParams {
         self
     }
 
-    pub fn fit(&self, z: &[f64]) -> Option<usize> {
-        self.fit_result(z).unwrap_or_else(|e| panic!("{}", e))
-    }
-
-    fn fit_result(&self, z: &[f64]) -> Result<Option<usize>, Error> {
+    pub fn fit(&self, z: &[f64]) -> Result<Option<usize>, Error> {
         if self.min_size < 2 {
             return Err(Error::Parameter("min_size must be at least 2".to_string()));
         }
@@ -71,6 +67,8 @@ impl AmocParams {
 
 #[cfg(test)]
 mod tests {
+    use crate::Error;
+
     fn generate_series() -> Vec<f64> {
         vec![
             3.0, 1.0, 2.0, 3.0, 2.0, 1.0, 1.0, 2.0, 2.0, 3.0,
@@ -82,28 +80,28 @@ mod tests {
     #[test]
     fn test_amoc() {
         let series = generate_series();
-        let breakout = crate::amoc().min_size(5).fit(&series);
+        let breakout = crate::amoc().min_size(5).fit(&series).unwrap();
         assert_eq!(breakout, Some(19));
     }
 
     #[test]
     fn test_tail() {
         let series = generate_series();
-        let breakout = crate::amoc().min_size(5).exact(false).fit(&series);
+        let breakout = crate::amoc().min_size(5).exact(false).fit(&series).unwrap();
         assert_eq!(breakout, Some(20));
     }
 
     #[test]
     fn test_empty() {
         let series = Vec::new();
-        let breakout = crate::amoc().fit(&series);
+        let breakout = crate::amoc().fit(&series).unwrap();
         assert_eq!(breakout, None);
     }
 
     #[test]
     fn test_constant() {
         let series = vec![1.0; 100];
-        let breakout = crate::amoc().fit(&series);
+        let breakout = crate::amoc().fit(&series).unwrap();
         assert_eq!(breakout, None);
     }
 
@@ -111,7 +109,7 @@ mod tests {
     fn test_almost_constant() {
         let mut series = vec![1.0; 100];
         series[50] = 2.0;
-        let breakout = crate::amoc().fit(&series);
+        let breakout = crate::amoc().fit(&series).unwrap();
         assert_eq!(breakout, None);
     }
 
@@ -121,21 +119,27 @@ mod tests {
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
             1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
         ];
-        let breakout = crate::amoc().min_size(5).fit(&series);
+        let breakout = crate::amoc().min_size(5).fit(&series).unwrap();
         assert_eq!(breakout, Some(10));
     }
 
     #[test]
-    #[should_panic(expected = "min_size must be at least 2")]
     fn test_bad_min_size() {
         let series = Vec::new();
-        crate::amoc().min_size(1).fit(&series);
+        let result = crate::amoc().min_size(1).fit(&series);
+        assert_eq!(
+            result.unwrap_err(),
+            Error::Parameter("min_size must be at least 2".to_string())
+        );
     }
 
     #[test]
-    #[should_panic(expected = "alpha must be between 0 and 2")]
     fn test_bad_alpha() {
         let series = Vec::new();
-        crate::amoc().alpha(3.0).fit(&series);
+        let result = crate::amoc().alpha(3.0).fit(&series);
+        assert_eq!(
+            result.unwrap_err(),
+            Error::Parameter("alpha must be between 0 and 2".to_string())
+        );
     }
 }

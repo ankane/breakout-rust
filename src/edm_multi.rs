@@ -185,7 +185,7 @@ pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usiz
         }
         at = prev[at];
     }
-    ret.sort();
+    ret.sort_unstable();
 
     ret
 }
@@ -283,7 +283,7 @@ pub fn edm_percent(z: &[f64], min_size: usize, percent: f64, degree: i32) -> Vec
         }
         at = prev[at];
     }
-    ret.sort();
+    ret.sort_unstable();
 
     ret
 }

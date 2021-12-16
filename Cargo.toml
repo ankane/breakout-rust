@@ -1,6 +1,6 @@
 [package]
 name = "breakout"
-version = "0.2.0"
+version = "0.2.1"
 description = "Breakout detection for Rust"
 repository = "https://github.com/ankane/breakout-rust"
 license = "GPL-2.0-or-later"

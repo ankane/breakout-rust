@@ -194,12 +194,11 @@ pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usiz
 // Quadratic penalty means that each new breakout must result in at least an (X*k)% increase for k breakouts
 pub fn edm_percent(z: &[f64], min_size: usize, percent: f64, degree: i32) -> Vec<usize> {
     // identify which type of penalization to use
-    let g: fn(f64) -> f64;
-    match degree {
-        1 => g = linear,
-        2 => g = quadratic,
-        _ => g = constant
-    }
+    let g: fn(f64) -> f64 = match degree {
+        1 => linear,
+        2 => quadratic,
+        _ => constant
+    };
 
     let n = z.len();
     let mut prev = vec![0; n + 1];

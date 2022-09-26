@@ -102,12 +102,11 @@ fn quadratic(x: f64) -> f64 {
 
 pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usize> {
     // identify which type of penalization to use
-    let g: fn(f64) -> f64;
-    match degree {
-        1 => g = linear,
-        2 => g = quadratic,
-        _ => g = constant
-    }
+    let g: fn(f64) -> f64 = match degree {
+        1 => linear,
+        2 => quadratic,
+        _ => constant
+    };
 
     let n = z.len();
     let mut beta = beta;
@@ -265,12 +264,10 @@ pub fn edm_percent(z: &[f64], min_size: usize, percent: f64, degree: i32) -> Vec
         }
 
         // check to make sure we meet the percent change requirement
-        if prev[s] != 0 {
-            if f[s] - f[prev[s]] < percent * g(number[prev[s]] as f64) * f[prev[s]] {
-                number[s] = number[prev[s]];
-                f[s] = f[prev[s]];
-                prev[s] = prev[prev[s]];
-            }
+        if prev[s] != 0 && f[s] - f[prev[s]] < percent * g(number[prev[s]] as f64) * f[prev[s]] {
+            number[s] = number[prev[s]];
+            f[s] = f[prev[s]];
+            prev[s] = prev[prev[s]];
         }
     }
 

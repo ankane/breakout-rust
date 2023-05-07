@@ -79,12 +79,10 @@ fn remove_element(m: &mut Multiset<MinItem>, m2: &mut Multiset<MaxItem>, x: f64)
 
 // given a pair of trees obtain the median
 fn get_median(m: &Multiset<MinItem>, m2: &Multiset<MaxItem>) -> f64 {
-    if m.len() > m2.len() {
-        m.first().unwrap().0
-    } else if m2.len() > m.len() {
-        m2.first().unwrap().0
-    } else {
-        (m2.first().unwrap().0 + m.first().unwrap().0) / 2.0
+    match m.len().cmp(&m2.len()) {
+        Ordering::Greater => m.first().unwrap().0,
+        Ordering::Less => m2.first().unwrap().0,
+        Ordering::Equal => (m2.first().unwrap().0 + m.first().unwrap().0) / 2.0,
     }
 }
 

@@ -40,12 +40,10 @@ impl Ord for MinItem {
 }
 
 fn get_median(m: &BinaryHeap<MinItem>, m2: &BinaryHeap<MaxItem>) -> f64 {
-    if m.len() > m2.len() {
-        m.peek().unwrap().0
-    } else if m2.len() > m.len() {
-        m2.peek().unwrap().0
-    } else {
-        (m.peek().unwrap().0 + m2.peek().unwrap().0) / 2.0
+    match m.len().cmp(&m2.len()) {
+        Ordering::Greater => m.peek().unwrap().0,
+        Ordering::Less => m2.peek().unwrap().0,
+        Ordering::Equal => (m.peek().unwrap().0 + m2.peek().unwrap().0) / 2.0,
     }
 }
 

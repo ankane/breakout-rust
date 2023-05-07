@@ -52,7 +52,7 @@ fn get_quantile(x: &[f64], quant: f64) -> f64 {
             let r_weight = 1.0 - l_weight;
             let lu = (u + l) / 2.0;
             let rl = (u + lu) / 2.0;
-            return l_weight * (quant * (lu - l) as f64 + l as f64) + r_weight * (quant * (u - rl) as f64 + rl as f64);
+            return l_weight * (quant * (lu - l) + l) + r_weight * (quant * (u - rl) + rl);
         }
         else if x[j] >= k { // More than k elements in node's left child's subtree, move to left child
             i = j;
@@ -64,7 +64,7 @@ fn get_quantile(x: &[f64], quant: f64) -> f64 {
             l = (l + u) / 2.0;
         }
     }
-    quant * (u - l) as f64 + l as f64
+    quant * (u - l) + l
 }
 
 pub fn edm_tail(z: &[f64], min_size: usize, alpha: f64) -> (usize, f64) {

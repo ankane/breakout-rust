@@ -4,6 +4,8 @@
 
 Learn [how it works](https://blog.twitter.com/engineering/en_us/a/2014/breakout-detection-in-the-wild)
 
+:tada: Zero dependencies
+
 [![Build Status](https://github.com/ankane/breakout-rust/workflows/build/badge.svg?branch=master)](https://github.com/ankane/breakout-rust/actions)
 
 ## Installation

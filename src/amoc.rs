@@ -3,14 +3,14 @@ use crate::Error;
 pub struct AmocParams {
     min_size: usize,
     alpha: f64,
-    exact: bool
+    exact: bool,
 }
 
 pub fn amoc() -> AmocParams {
     AmocParams {
         min_size: 30,
         alpha: 2.0,
-        exact: true
+        exact: true,
     }
 }
 
@@ -35,7 +35,9 @@ impl AmocParams {
             return Err(Error::Parameter("min_size must be at least 2".to_string()));
         }
         if self.alpha < 0.0 || self.alpha > 2.0 {
-            return Err(Error::Parameter("alpha must be between 0 and 2".to_string()));
+            return Err(Error::Parameter(
+                "alpha must be between 0 and 2".to_string(),
+            ));
         }
 
         if z.len() < self.min_size {
@@ -69,6 +71,7 @@ impl AmocParams {
 mod tests {
     use crate::Error;
 
+    #[rustfmt::skip]
     fn generate_series() -> Vec<f64> {
         vec![
             3.0, 1.0, 2.0, 3.0, 2.0, 1.0, 1.0, 2.0, 2.0, 3.0,
@@ -114,6 +117,7 @@ mod tests {
     }
 
     #[test]
+    #[rustfmt::skip]
     fn test_simple() {
         let series = vec![
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,

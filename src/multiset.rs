@@ -3,14 +3,14 @@ use std::collections::BTreeMap;
 
 pub struct Multiset<T> {
     map: BTreeMap<T, usize>,
-    len: usize
+    len: usize,
 }
 
 impl<T: std::cmp::Ord> Multiset<T> {
     pub fn new() -> Self {
         Self {
             map: BTreeMap::new(),
-            len: 0
+            len: 0,
         }
     }
 

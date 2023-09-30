@@ -75,7 +75,8 @@ pub fn edmx(z: &[f64], min_size: usize, _alpha: f64) -> (usize, f64) {
         add_to_heaps(&mut left_min, &mut left_max, z[i]);
     }
 
-    for tau1 in min_size..n - min_size + 1 { // iterate over breakout locations
+    // iterate over breakout locations
+    for tau1 in min_size..n - min_size + 1 {
         add_to_heaps(&mut left_min, &mut left_max, z[tau1 - 1]);
 
         let mut right_min = BinaryHeap::new();

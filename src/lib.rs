@@ -11,5 +11,5 @@ mod multi;
 mod multiset;
 
 pub use amoc::{amoc, AmocParams};
-pub use multi::{multi, MultiParams};
 pub use error::Error;
+pub use multi::{multi, MultiParams};

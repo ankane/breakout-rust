@@ -103,12 +103,13 @@ pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usiz
     let g: fn(f64) -> f64 = match degree {
         1 => linear,
         2 => quadratic,
-        _ => constant
+        _ => constant,
     };
 
     let n = z.len();
     let mut beta = beta;
-    if beta < 0.0 { // assume that beta is a positive number
+    // assume that beta is a positive number
+    if beta < 0.0 {
         beta = -beta;
     }
     let mut prev = vec![0; n + 1];
@@ -139,9 +140,12 @@ pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usiz
         }
 
         // iterate over possible locations for the penultimate change
-        for t in min_size..s - min_size + 1 { // modify limits to deal with min_size
-            insert_element(&mut left_min, &mut left_max, z[t - 1]); // insert element into left tree
-            remove_element(&mut right_min, &mut right_max, z[t - 1]); // remove element from right tree
+        // modify limits to deal with min_size
+        for t in min_size..s - min_size + 1 {
+            // insert element into left tree
+            insert_element(&mut left_min, &mut left_max, z[t - 1]);
+            // remove element from right tree
+            remove_element(&mut right_min, &mut right_max, z[t - 1]);
 
             // left tree now has { Z[prev[t-1]], ..., Z[t-1] }
             // right tree now has { Z[t], ..., Z[s-1] }
@@ -162,7 +166,8 @@ pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usiz
             let left_median = get_median(&left_min, &left_max);
             let right_median = get_median(&right_min, &right_max);
             let normalize = ((t - prev[t]) * (s - t)) as f64 / ((s - prev[t]) as f64).powf(2.0);
-            let tmp = f[t] + normalize * (left_median - right_median).powf(2.0) - beta * g(number[t] as f64);
+            let tmp = f[t] + normalize * (left_median - right_median).powf(2.0)
+                - beta * g(number[t] as f64);
 
             // check for improved optimal statistic value
             if tmp > f[s] {
@@ -177,7 +182,8 @@ pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usiz
     let mut ret = Vec::new();
     let mut at = n;
     while at != 0 {
-        if prev[at] != 0 { // don't insert 0 as a change point estimate
+        // don't insert 0 as a change point estimate
+        if prev[at] != 0 {
             ret.push(prev[at]);
         }
         at = prev[at];
@@ -195,7 +201,7 @@ pub fn edm_percent(z: &[f64], min_size: usize, percent: f64, degree: i32) -> Vec
     let g: fn(f64) -> f64 = match degree {
         1 => linear,
         2 => quadratic,
-        _ => constant
+        _ => constant,
     };
 
     let n = z.len();
@@ -227,9 +233,12 @@ pub fn edm_percent(z: &[f64], min_size: usize, percent: f64, degree: i32) -> Vec
         }
 
         // iterate over possible locations for the penultiamte change
-        for t in min_size..s - min_size + 1 { // modify limits to deal with min_size
-            insert_element(&mut left_min, &mut left_max, z[t - 1]); // insert element into left tree
-            remove_element(&mut right_min, &mut right_max, z[t - 1]); // remove element from right tree
+        // modify limits to deal with min_size
+        for t in min_size..s - min_size + 1 {
+            // insert element into left tree
+            insert_element(&mut left_min, &mut left_max, z[t - 1]);
+            // remove element from right tree
+            remove_element(&mut right_min, &mut right_max, z[t - 1]);
 
             // left tree now has { Z[prev[t-1]], ..., Z[t-1] }
             // right tree now has { Z[t], ..., Z[s-1] }
@@ -272,7 +281,8 @@ pub fn edm_percent(z: &[f64], min_size: usize, percent: f64, degree: i32) -> Vec
     let mut ret = Vec::new();
     let mut at = n;
     while at != 0 {
-        if prev[at] != 0 { // don't insert 0 as a change point estimate
+        // don't insert 0 as a change point estimate
+        if prev[at] != 0 {
             ret.push(prev[at]);
         }
         at = prev[at];

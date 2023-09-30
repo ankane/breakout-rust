@@ -4,7 +4,7 @@ pub struct MultiParams {
     min_size: usize,
     degree: i32,
     beta: Option<f64>,
-    percent: Option<f64>
+    percent: Option<f64>,
 }
 
 pub fn multi() -> MultiParams {
@@ -12,7 +12,7 @@ pub fn multi() -> MultiParams {
         min_size: 30,
         degree: 1,
         beta: None,
-        percent: None
+        percent: None,
     }
 }
 
@@ -29,7 +29,7 @@ impl MultiParams {
 
     pub fn beta<T>(&mut self, value: T) -> &mut Self
     where
-        T: Into<Option<f64>>
+        T: Into<Option<f64>>,
     {
         self.beta = value.into();
         self
@@ -37,7 +37,7 @@ impl MultiParams {
 
     pub fn percent<T>(&mut self, value: T) -> &mut Self
     where
-        T: Into<Option<f64>>
+        T: Into<Option<f64>>,
     {
         self.percent = value.into();
         self
@@ -48,7 +48,9 @@ impl MultiParams {
             return Err(Error::Parameter("min_size must be at least 2".to_string()));
         }
         if self.beta.is_some() && self.percent.is_some() {
-            return Err(Error::Parameter("beta and percent cannot be passed together".to_string()));
+            return Err(Error::Parameter(
+                "beta and percent cannot be passed together".to_string(),
+            ));
         }
         if self.degree < 0 || self.degree > 2 {
             return Err(Error::Parameter("degree must be 0, 1, or 2".to_string()));
@@ -68,9 +70,19 @@ impl MultiParams {
         let zcounts: Vec<f64> = z.iter().map(|x| (x - min) / denom).collect();
 
         if self.percent.is_some() {
-            Ok(crate::edm_multi::edm_percent(&zcounts, self.min_size, self.percent.unwrap(), self.degree))
+            Ok(crate::edm_multi::edm_percent(
+                &zcounts,
+                self.min_size,
+                self.percent.unwrap(),
+                self.degree,
+            ))
         } else {
-            Ok(crate::edm_multi::edm_multi(&zcounts, self.min_size, self.beta.unwrap_or(0.008), self.degree))
+            Ok(crate::edm_multi::edm_multi(
+                &zcounts,
+                self.min_size,
+                self.beta.unwrap_or(0.008),
+                self.degree,
+            ))
         }
     }
 }
@@ -79,6 +91,7 @@ impl MultiParams {
 mod tests {
     use crate::Error;
 
+    #[rustfmt::skip]
     fn generate_series() -> Vec<f64> {
         vec![
             3.0, 1.0, 2.0, 3.0, 2.0, 1.0, 1.0, 2.0, 2.0, 3.0,
@@ -97,7 +110,11 @@ mod tests {
     #[test]
     fn test_percent() {
         let series = generate_series();
-        let breakouts = crate::multi().min_size(5).percent(0.5).fit(&series).unwrap();
+        let breakouts = crate::multi()
+            .min_size(5)
+            .percent(0.5)
+            .fit(&series)
+            .unwrap();
         assert_eq!(vec![8, 19], breakouts);
     }
 
@@ -124,6 +141,7 @@ mod tests {
     }
 
     #[test]
+    #[rustfmt::skip]
     fn test_simple() {
         let series = vec![
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,

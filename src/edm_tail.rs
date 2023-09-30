@@ -10,7 +10,7 @@ struct Information {
     best_loc: i32,
     best_t2: i32,
     min_size: usize,
-    b: i32
+    b: i32,
 }
 
 impl Information {
@@ -23,7 +23,7 @@ impl Information {
             best_stat: -3.0,
             best_loc: -3,
             best_t2: -3,
-            min_size: m
+            min_size: m,
         }
     }
 }
@@ -41,12 +41,14 @@ fn get_quantile(x: &[f64], quant: f64) -> f64 {
     let mut u = 1.0;
     let mut i = 1;
     let mut j;
-    while i < n { // Make sure that we do not go beyond the array bounds
+    // Make sure that we do not go beyond the array bounds
+    while i < n {
         j = i << 1;
         if j >= n {
             break;
         }
-        if x[i] == k { // Exactly k elements in this node's subtree. So can terminate early
+        // Exactly k elements in this node's subtree. So can terminate early
+        if x[i] == k {
             // Return a weighted combination of the child node medians
             let l_weight = x[j] / (x[j] + x[j + 1]);
             let r_weight = 1.0 - l_weight;
@@ -54,11 +56,13 @@ fn get_quantile(x: &[f64], quant: f64) -> f64 {
             let rl = (u + lu) / 2.0;
             return l_weight * (quant * (lu - l) + l) + r_weight * (quant * (u - rl) + rl);
         }
-        else if x[j] >= k { // More than k elements in node's left child's subtree, move to left child
+        // More than k elements in node's left child's subtree, move to left child
+        else if x[j] >= k {
             i = j;
             u = (l + u) / 2.0;
         }
-        else if x[j] < k { // Not enough elements in node's left child's subtree, move to right child
+        // Not enough elements in node's left child's subtree, move to right child
+        else if x[j] < k {
             k -= x[j];
             i = j + 1;
             l = (l + u) / 2.0;
@@ -129,7 +133,8 @@ pub fn edm_tail(z: &[f64], min_size: usize, alpha: f64) -> (usize, f64) {
     tau2 += 1;
     while tau2 < n + 1 {
         let mut index = get_index(info.b, z[tau2 - 1] - z[tau2 - 2]);
-        while index != 0 { // array position 0 is not used, so we exit once we reach this location
+        // array position 0 is not used, so we exit once we reach this location
+        while index != 0 {
             info.bv[index] += 1.0;
             index /= 2;
         }
@@ -264,7 +269,13 @@ fn forward_update(z: &[f64], info: &mut Information, tau1: usize, quant: f64, al
     tau1
 }
 
-fn backward_update(z: &[f64], info: &mut Information, tau1: usize, quant: f64, alpha: f64) -> usize {
+fn backward_update(
+    z: &[f64],
+    info: &mut Information,
+    tau1: usize,
+    quant: f64,
+    alpha: f64,
+) -> usize {
     let min_size = info.min_size;
     let mut tau2 = tau1 + min_size;
     let mut tau1 = tau1;

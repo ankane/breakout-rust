@@ -1,6 +1,4 @@
-//! Breakout detection for Rust
-//!
-//! [View the docs](https://github.com/ankane/breakout-rust)
+#![doc = include_str!("../README.md")]
 
 mod amoc;
 mod edm_multi;

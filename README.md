@@ -6,7 +6,7 @@ Learn [how it works](https://blog.twitter.com/engineering/en_us/a/2014/breakout-
 
 🎉 Zero dependencies
 
-[![Build Status](https://github.com/ankane/breakout-rust/workflows/build/badge.svg?branch=master)](https://github.com/ankane/breakout-rust/actions)
+[![Build Status](https://github.com/ankane/breakout-rust/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/breakout-rust/actions)
 
 ## Installation
 

@@ -5,7 +5,7 @@ description = "Breakout detection for Rust"
 repository = "https://github.com/ankane/breakout-rust"
 license = "GPL-2.0-or-later"
 authors = ["Andrew Kane <andrew@ankane.org>"]
-edition = "2018"
+edition = "2021"
 readme = "README.md"
 
 [lib]

@@ -1,3 +1,7 @@
+## 0.3.0 (unreleased)
+
+- Updated Rust edition to 2021
+
 ## 0.2.1 (2021-12-15)
 
 - Added `Error` trait to errors

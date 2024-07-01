@@ -45,12 +45,10 @@ fn insert_element(m: &mut Multiset<MinItem>, m2: &mut Multiset<MaxItem>, x: f64)
     }
 
     if m.len() > m2.len() + 1 {
-        // TODO use pop_first for performance when available
         let i = m.first().unwrap().0;
         m2.insert(MaxItem(i));
         m.remove(MinItem(i));
     } else if m2.len() > m.len() + 1 {
-        // TODO use pop_first for performance when available
         let i = m2.first().unwrap().0;
         m.insert(MinItem(i));
         m2.remove(MaxItem(i));
@@ -65,12 +63,10 @@ fn remove_element(m: &mut Multiset<MinItem>, m2: &mut Multiset<MaxItem>, x: f64)
     }
 
     if m.len() > m2.len() + 1 {
-        // TODO use pop_first for performance when available
         let i = m.first().unwrap().0;
         m2.insert(MaxItem(i));
         m.remove(MinItem(i));
     } else if m2.len() > m.len() + 1 {
-        // TODO use pop_first for performance when available
         let i = m2.first().unwrap().0;
         m.insert(MinItem(i));
         m2.remove(MaxItem(i));

@@ -6,6 +6,7 @@ repository = "https://github.com/ankane/breakout-rust"
 license = "GPL-2.0-or-later"
 authors = ["Andrew Kane <andrew@ankane.org>"]
 edition = "2021"
+rust-version = "1.66.0"
 readme = "README.md"
 
 [lib]

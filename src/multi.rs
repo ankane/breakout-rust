@@ -1,6 +1,6 @@
 use crate::Error;
 
-/// A builder for detecting multiple breakouts.
+/// Parameters for detecting multiple breakouts.
 pub struct MultiParams {
     min_size: usize,
     degree: i32,
@@ -8,7 +8,7 @@ pub struct MultiParams {
     percent: Option<f64>,
 }
 
-/// Returns a builder for detecting multiple breakouts.
+/// Returns parameters for detecting multiple breakouts.
 pub fn multi() -> MultiParams {
     MultiParams {
         min_size: 30,

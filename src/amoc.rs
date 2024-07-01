@@ -1,11 +1,13 @@
 use crate::Error;
 
+/// A builder for detecting a single breakout (at most one change).
 pub struct AmocParams {
     min_size: usize,
     alpha: f64,
     exact: bool,
 }
 
+/// Returns a builder for detecting a single breakout (at most one change).
 pub fn amoc() -> AmocParams {
     AmocParams {
         min_size: 30,

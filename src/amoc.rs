@@ -15,21 +15,25 @@ pub fn amoc() -> AmocParams {
 }
 
 impl AmocParams {
+    /// Sets the minimum observations between breakouts.
     pub fn min_size(&mut self, value: usize) -> &mut Self {
         self.min_size = value;
         self
     }
 
+    /// Sets the weight of the distance between observations.
     pub fn alpha(&mut self, value: f64) -> &mut Self {
         self.alpha = value;
         self
     }
 
+    /// Sets whether to use the exact or approximate median.
     pub fn exact(&mut self, value: bool) -> &mut Self {
         self.exact = value;
         self
     }
 
+    /// Detects a single breakout (at most one change).
     pub fn fit(&self, z: &[f64]) -> Result<Option<usize>, Error> {
         if self.min_size < 2 {
             return Err(Error::Parameter("min_size must be at least 2".to_string()));

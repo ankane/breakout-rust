@@ -17,16 +17,19 @@ pub fn multi() -> MultiParams {
 }
 
 impl MultiParams {
+    /// Sets the minimum observations between breakouts.
     pub fn min_size(&mut self, value: usize) -> &mut Self {
         self.min_size = value;
         self
     }
 
+    /// Sets the degree of the penalization polynomial.
     pub fn degree(&mut self, value: i32) -> &mut Self {
         self.degree = value;
         self
     }
 
+    /// Sets the penalization term.
     pub fn beta<T>(&mut self, value: T) -> &mut Self
     where
         T: Into<Option<f64>>,
@@ -35,6 +38,7 @@ impl MultiParams {
         self
     }
 
+    /// Sets the minimum percent change in goodness of fit statistic.
     pub fn percent<T>(&mut self, value: T) -> &mut Self
     where
         T: Into<Option<f64>>,
@@ -43,6 +47,7 @@ impl MultiParams {
         self
     }
 
+    /// Detects breakouts in a series.
     pub fn fit(&self, z: &[f64]) -> Result<Vec<usize>, Error> {
         if self.min_size < 2 {
             return Err(Error::Parameter("min_size must be at least 2".to_string()));

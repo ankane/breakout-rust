@@ -23,7 +23,7 @@ impl<T: std::cmp::Ord> Multiset<T> {
     }
 
     pub fn first(&self) -> Option<&T> {
-        self.map.keys().next()
+        self.map.first_key_value().map(|v| v.0)
     }
 
     pub fn insert(&mut self, value: T) {

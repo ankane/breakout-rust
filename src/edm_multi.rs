@@ -9,13 +9,13 @@ impl Eq for MaxItem {}
 // opposite of edmx
 impl PartialOrd for MaxItem {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        other.0.partial_cmp(&self.0)
+        Some(self.cmp(other))
     }
 }
 
 impl Ord for MaxItem {
     fn cmp(&self, other: &MaxItem) -> Ordering {
-        self.partial_cmp(other).unwrap()
+        other.0.partial_cmp(&self.0).unwrap()
     }
 }
 
@@ -27,13 +27,13 @@ impl Eq for MinItem {}
 // opposite of edmx
 impl PartialOrd for MinItem {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.0.partial_cmp(&other.0)
+        Some(self.cmp(other))
     }
 }
 
 impl Ord for MinItem {
     fn cmp(&self, other: &MinItem) -> Ordering {
-        self.partial_cmp(other).unwrap()
+        self.0.partial_cmp(&other.0).unwrap()
     }
 }
 

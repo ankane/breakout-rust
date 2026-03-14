@@ -76,11 +76,11 @@ impl MultiParams {
         }
         let zcounts: Vec<f64> = z.iter().map(|x| (x - min) / denom).collect();
 
-        if self.percent.is_some() {
+        if let Some(percent) = self.percent {
             Ok(crate::edm_multi::edm_percent(
                 &zcounts,
                 self.min_size,
-                self.percent.unwrap(),
+                percent,
                 self.degree,
             ))
         } else {

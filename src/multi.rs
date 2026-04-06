@@ -52,15 +52,15 @@ impl MultiParams {
     /// Detects breakouts in a series.
     pub fn fit(&self, z: &[f64]) -> Result<Vec<usize>, Error> {
         if self.min_size < 2 {
-            return Err(Error::Parameter("min_size must be at least 2".to_string()));
+            return Err(Error::Parameter("min_size must be at least 2"));
         }
         if self.beta.is_some() && self.percent.is_some() {
             return Err(Error::Parameter(
-                "beta and percent cannot be passed together".to_string(),
+                "beta and percent cannot be passed together",
             ));
         }
         if self.degree < 0 || self.degree > 2 {
-            return Err(Error::Parameter("degree must be 0, 1, or 2".to_string()));
+            return Err(Error::Parameter("degree must be 0, 1, or 2"));
         }
 
         if z.len() < self.min_size {
@@ -164,7 +164,7 @@ mod tests {
         let result = crate::multi().min_size(1).fit(&series);
         assert_eq!(
             result.unwrap_err(),
-            Error::Parameter("min_size must be at least 2".to_string())
+            Error::Parameter("min_size must be at least 2")
         );
     }
 
@@ -174,7 +174,7 @@ mod tests {
         let result = crate::multi().beta(0.008).percent(0.5).fit(&series);
         assert_eq!(
             result.unwrap_err(),
-            Error::Parameter("beta and percent cannot be passed together".to_string())
+            Error::Parameter("beta and percent cannot be passed together")
         );
     }
 
@@ -184,7 +184,7 @@ mod tests {
         let result = crate::multi().degree(3).fit(&series);
         assert_eq!(
             result.unwrap_err(),
-            Error::Parameter("degree must be 0, 1, or 2".to_string())
+            Error::Parameter("degree must be 0, 1, or 2")
         );
     }
 }

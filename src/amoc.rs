@@ -38,12 +38,10 @@ impl AmocParams {
     /// Detects a single breakout (at most one change).
     pub fn fit(&self, z: &[f64]) -> Result<Option<usize>, Error> {
         if self.min_size < 2 {
-            return Err(Error::Parameter("min_size must be at least 2".to_string()));
+            return Err(Error::Parameter("min_size must be at least 2"));
         }
         if self.alpha < 0.0 || self.alpha > 2.0 {
-            return Err(Error::Parameter(
-                "alpha must be between 0 and 2".to_string(),
-            ));
+            return Err(Error::Parameter("alpha must be between 0 and 2"));
         }
 
         if z.len() < self.min_size {
@@ -139,7 +137,7 @@ mod tests {
         let result = crate::amoc().min_size(1).fit(&series);
         assert_eq!(
             result.unwrap_err(),
-            Error::Parameter("min_size must be at least 2".to_string())
+            Error::Parameter("min_size must be at least 2")
         );
     }
 
@@ -149,7 +147,7 @@ mod tests {
         let result = crate::amoc().alpha(3.0).fit(&series);
         assert_eq!(
             result.unwrap_err(),
-            Error::Parameter("alpha must be between 0 and 2".to_string())
+            Error::Parameter("alpha must be between 0 and 2")
         );
     }
 }

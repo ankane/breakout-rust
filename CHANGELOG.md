@@ -1,3 +1,7 @@
+## 0.4.0 (unreleased)
+
+- Improved `Error` enum
+
 ## 0.3.0 (2024-07-10)
 
 - Updated Rust edition to 2021

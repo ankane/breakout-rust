@@ -1,4 +1,5 @@
 use crate::Error;
+use alloc::vec::Vec;
 
 /// Parameters for detecting a single breakout (at most one change).
 pub struct AmocParams {
@@ -74,6 +75,7 @@ impl AmocParams {
 #[cfg(test)]
 mod tests {
     use crate::Error;
+    use alloc::{vec, vec::Vec};
 
     #[rustfmt::skip]
     fn generate_series() -> Vec<f64> {

@@ -1,12 +1,12 @@
-use std::collections::btree_map::Entry;
-use std::collections::BTreeMap;
+use alloc::collections::btree_map::Entry;
+use alloc::collections::BTreeMap;
 
 pub struct Multiset<T> {
     map: BTreeMap<T, usize>,
     len: usize,
 }
 
-impl<T: std::cmp::Ord> Multiset<T> {
+impl<T: core::cmp::Ord> Multiset<T> {
     pub fn new() -> Self {
         Self {
             map: BTreeMap::new(),

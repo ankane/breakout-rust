@@ -1,5 +1,7 @@
+use crate::math::pow2;
 use crate::multiset::Multiset;
-use std::cmp::Ordering;
+use alloc::{vec, vec::Vec};
+use core::cmp::Ordering;
 
 #[derive(PartialEq)]
 struct MaxItem(f64);
@@ -161,9 +163,9 @@ pub fn edm_multi(z: &[f64], min_size: usize, beta: f64, degree: i32) -> Vec<usiz
             // calculate statistic value
             let left_median = get_median(&left_min, &left_max);
             let right_median = get_median(&right_min, &right_max);
-            let normalize = ((t - prev[t]) * (s - t)) as f64 / ((s - prev[t]) as f64).powi(2);
-            let tmp = f[t] + normalize * (left_median - right_median).powi(2)
-                - beta * g(number[t] as f64);
+            let normalize = ((t - prev[t]) * (s - t)) as f64 / pow2((s - prev[t]) as f64);
+            let tmp =
+                f[t] + normalize * pow2(left_median - right_median) - beta * g(number[t] as f64);
 
             // check for improved optimal statistic value
             if tmp > f[s] {
@@ -254,8 +256,8 @@ pub fn edm_percent(z: &[f64], min_size: usize, percent: f64, degree: i32) -> Vec
             // calculate statistic value
             let left_median = get_median(&left_min, &left_max);
             let right_median = get_median(&right_min, &right_max);
-            let normalize = ((t - prev[t]) * (s - t)) as f64 / ((s - prev[t]) as f64).powi(2);
-            let tmp = f[t] + normalize * (left_median - right_median).powi(2);
+            let normalize = ((t - prev[t]) * (s - t)) as f64 / pow2((s - prev[t]) as f64);
+            let tmp = f[t] + normalize * pow2(left_median - right_median);
 
             // find best location for change point. check % condition later
             if tmp > f[s] {

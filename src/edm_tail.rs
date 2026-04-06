@@ -1,5 +1,8 @@
 // Calculates the between distance using the delta points around the change point estimate
 
+use alloc::{vec, vec::Vec};
+use crate::math::{ceil, ln, powf};
+
 // Class used to hold all the information about the
 // breakout location and the interval trees
 struct Information {
@@ -30,13 +33,13 @@ impl Information {
 
 // Get index of leaf node interval containing x
 fn get_index(b: i32, x: f64) -> usize {
-    ((x.abs() * (1 << b) as f64).ceil() + (1 << b) as f64 - 1.0) as usize
+    (ceil(x.abs() * (1 << b) as f64) + (1 << b) as f64 - 1.0) as usize
 }
 
 // Return approximate quantile based on the interval tree
 fn get_quantile(x: &[f64], quant: f64) -> f64 {
     let n = x.len();
-    let mut k = (x[1] * quant).ceil();
+    let mut k = ceil(x[1] * quant);
     let mut l = 0.0;
     let mut u = 1.0;
     let mut i = 1;
@@ -74,7 +77,7 @@ fn get_quantile(x: &[f64], quant: f64) -> f64 {
 pub fn edm_tail(z: &[f64], min_size: usize, alpha: f64) -> (usize, f64) {
     let quant = 0.5;
     let n = z.len();
-    let mut eps = (n as f64).ln().ceil() as i32;
+    let mut eps = ceil(ln(n as f64)) as i32;
     eps = eps.max(10);
 
     let mut info = Information::new(eps, min_size);
@@ -118,9 +121,9 @@ pub fn edm_tail(z: &[f64], min_size: usize, alpha: f64) -> (usize, f64) {
         }
     }
 
-    let qa = get_quantile(&info.a, quant).powf(alpha);
-    let mut qb = get_quantile(&info.bv, quant).powf(alpha);
-    let qc = get_quantile(&info.ab, quant).powf(alpha);
+    let qa = powf(get_quantile(&info.a, quant), alpha);
+    let mut qb = powf(get_quantile(&info.bv, quant), alpha);
+    let qc = powf(get_quantile(&info.ab, quant), alpha);
 
     let mut stat = 2.0 * qc - qa - qb;
     stat *= (tau1 * (tau2 - tau1) / tau2) as f64;
@@ -138,7 +141,7 @@ pub fn edm_tail(z: &[f64], min_size: usize, alpha: f64) -> (usize, f64) {
             info.bv[index] += 1.0;
             index /= 2;
         }
-        qb = get_quantile(&info.bv, quant).powf(alpha);
+        qb = powf(get_quantile(&info.bv, quant), alpha);
         stat = 2.0 * qc - qa - qb;
         stat *= ((tau2 - tau1) * tau1 / tau2) as f64;
 
@@ -192,7 +195,7 @@ fn forward_update(z: &[f64], info: &mut Information, tau1: usize, quant: f64, al
         info.a[index] += 1.0;
         index /= 2;
     }
-    let qa = get_quantile(&info.a, quant).powf(alpha);
+    let qa = powf(get_quantile(&info.a, quant), alpha);
 
     // Update AB tree
     index = get_index(info.b, z[tau1 - 1] - z[tau1 - min_size - 1]);
@@ -229,7 +232,7 @@ fn forward_update(z: &[f64], info: &mut Information, tau1: usize, quant: f64, al
         info.ab[index] += 1.0;
         index /= 2;
     }
-    let qc = get_quantile(&info.ab, quant).powf(alpha);
+    let qc = powf(get_quantile(&info.ab, quant), alpha);
 
     // Update B tree
     for i in tau1..tau2 {
@@ -253,7 +256,7 @@ fn forward_update(z: &[f64], info: &mut Information, tau1: usize, quant: f64, al
             info.bv[index] += 1.0;
             index /= 2;
         }
-        let qb = get_quantile(&info.bv, quant).powf(alpha);
+        let qb = powf(get_quantile(&info.bv, quant), alpha);
 
         let mut stat = 2.0 * qc - qa - qb;
         stat *= ((tau2 - tau1) * tau1 / tau2) as f64;
@@ -302,7 +305,7 @@ fn backward_update(
         info.a[index] += 1.0;
         index /= 2;
     }
-    let qa = get_quantile(&info.a, quant).powf(alpha);
+    let qa = powf(get_quantile(&info.a, quant), alpha);
 
     // Update AB tree
     index = get_index(info.b, z[tau1 - 1] - z[tau1 - min_size - 1]);
@@ -339,7 +342,7 @@ fn backward_update(
         info.ab[index] += 1.0;
         index /= 2;
     }
-    let qc = get_quantile(&info.ab, quant).powf(alpha);
+    let qc = powf(get_quantile(&info.ab, quant), alpha);
 
     // Update B tree
     for i in tau1..tau1 + min_size - 1 {
@@ -364,7 +367,7 @@ fn backward_update(
             info.bv[index] += 1.0;
             index /= 2;
         }
-        let qb = get_quantile(&info.bv, quant).powf(alpha);
+        let qb = powf(get_quantile(&info.bv, quant), alpha);
 
         let mut stat = 2.0 * qc - qa - qb;
         stat *= ((tau2 - tau1) * tau1 / tau2) as f64;

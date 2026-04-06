@@ -1,5 +1,6 @@
 ## 0.4.0 (unreleased)
 
+- Added experimental support for `no_std`
 - Improved `Error` enum
 
 ## 0.3.0 (2024-07-10)

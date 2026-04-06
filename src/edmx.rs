@@ -2,8 +2,9 @@
 // This is the E-Divisive E-statistic when alpha = 2
 // Instead of calculating mean(X), we calculate median(X), and similarly for Y
 
-use std::cmp::Ordering;
-use std::collections::BinaryHeap;
+use crate::math::pow2;
+use alloc::collections::BinaryHeap;
+use core::cmp::Ordering;
 
 #[derive(PartialEq)]
 struct MaxItem(f64);
@@ -93,7 +94,7 @@ pub fn edmx(z: &[f64], min_size: usize, _alpha: f64) -> (usize, f64) {
             add_to_heaps(&mut right_min, &mut right_max, z[tau2 - 1]);
             let medr = get_median(&right_min, &right_max);
 
-            let mut stat = (medl - medr).powi(2);
+            let mut stat = pow2(medl - medr);
             stat *= (tau1 * (tau2 - tau1)) as f64 / tau2 as f64;
 
             if stat > stat_best {

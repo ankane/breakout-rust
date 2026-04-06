@@ -1,4 +1,5 @@
 use crate::Error;
+use alloc::vec::Vec;
 
 /// Parameters for detecting multiple breakouts.
 pub struct MultiParams {
@@ -97,6 +98,7 @@ impl MultiParams {
 #[cfg(test)]
 mod tests {
     use crate::Error;
+    use alloc::{vec, vec::Vec};
 
     #[rustfmt::skip]
     fn generate_series() -> Vec<f64> {

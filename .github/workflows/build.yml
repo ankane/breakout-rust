@@ -6,3 +6,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: cargo test
+      # build for no_std to catch errors
+      - run: cargo build --features no_std
+      - run: cargo test --features no_std

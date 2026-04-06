@@ -26,13 +26,13 @@ let series = vec![
     6.0, 4.0, 4.0, 5.0, 6.0, 4.0, 4.0, 4.0, 6.0, 5.0,
     9.0, 8.0, 7.0, 9.0, 8.0, 9.0, 9.0, 9.0, 7.0, 9.0
 ];
-let breakouts = breakout::multi().min_size(5).fit(&series).unwrap();
+let breakouts = breakout::multi().min_size(5).fit(&series)?;
 ```
 
 Detect a single breakout (at most one change)
 
 ```rust
-let breakout = breakout::amoc().min_size(5).fit(&series).unwrap();
+let breakout = breakout::amoc().min_size(5).fit(&series)?;
 ```
 
 ## Options
@@ -40,20 +40,22 @@ let breakout = breakout::amoc().min_size(5).fit(&series).unwrap();
 Multi
 
 ```rust
-breakout::multi()
+let breakout = breakout::multi()
     .min_size(30)      // minimum observations between breakouts
     .degree(2)         // degree of the penalization polynomial
     .beta(0.008)       // penalization term
     .percent(None)     // minimum percent change in goodness of fit statistic
+    .fit(&series)?;
 ```
 
 Single
 
 ```rust
-breakout::amoc()
+let breakout = breakout::amoc()
     .min_size(30)      // minimum observations between breakouts
     .alpha(2.0)        // weight of the distance between observations
     .exact(false)      // exact or approximate median
+    .fit(&series)?;
 ```
 
 ## Credits

@@ -1,7 +1,7 @@
 // Calculates the between distance using the delta points around the change point estimate
 
-use alloc::{vec, vec::Vec};
 use crate::math::{ceil, ln, powf};
+use alloc::{vec, vec::Vec};
 
 // Class used to hold all the information about the
 // breakout location and the interval trees

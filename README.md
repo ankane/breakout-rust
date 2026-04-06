@@ -40,7 +40,7 @@ let breakout = breakout::amoc().min_size(5).fit(&series)?;
 Multi
 
 ```rust
-let breakout = breakout::multi()
+let breakouts = breakout::multi()
     .min_size(30)      // minimum observations between breakouts
     .degree(2)         // degree of the penalization polynomial
     .beta(0.008)       // penalization term

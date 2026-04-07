@@ -1,7 +1,7 @@
 ## 0.4.0 (unreleased)
 
 - Added experimental support for `no_std`
-- Improved `Error` enum
+- Changed `Error` enum to use `&'static str` instead of `String`
 
 ## 0.3.0 (2024-07-10)
 

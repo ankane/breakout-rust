@@ -13,7 +13,7 @@ Learn [how it works](https://blog.twitter.com/engineering/en_us/a/2014/breakout-
 Add this line to your application’s `Cargo.toml` under `[dependencies]`:
 
 ```toml
-breakout = "0.3"
+breakout = "0.4"
 ```
 
 ## Getting Started
